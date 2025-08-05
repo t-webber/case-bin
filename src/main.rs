@@ -34,11 +34,16 @@
 )]
 
 use clap::{CommandFactory as _, Parser};
-use std::io::{self, BufRead as _};
+use std::{
+    io::{self, BufRead as _},
+    process::exit,
+};
 
 use caseify::Caseify as _;
 
-/// Convert the case of the output. Choose one of the options below:
+/// Converts a string to a certain case. Choose a case with the options below.
+///
+/// Either provide a value, or it will read for stdin (e.g. for `echo text | caseify`)
 #[derive(Parser, Debug)]
 #[expect(clippy::struct_excessive_bools, reason = "CLI")]
 struct Args {
@@ -116,7 +121,10 @@ impl Args {
         if nb >= 2 {
             panic("You must provide 1 and 1 only output case.")
         } else if nb == 0 {
-            panic("No output case provided. Please choose the option for your output.")
+            panic(
+                "No output case provided. Please choose to what case you want to convert to.²:w
+                ",
+            )
         } else {
             if let Some(value) = &self.value {
                 println!("{}", self.apply_case(value));
@@ -134,10 +142,12 @@ impl Args {
 
 /// Panics with a formatted error message and prints the help message.
 #[expect(unused_must_use, reason = "don't crash in panic")]
-#[expect(clippy::panic, reason = "reason of the function")]
+#[expect(clippy::print_stderr, reason = "reason of the function")]
+#[expect(clippy::exit, reason = "panic with trace isn't user-friendly")]
 fn panic(msg: &str) -> ! {
     Args::command().print_help();
-    panic!("\x1b[31m{msg}\x1b[0m");
+    eprintln!("\x1b[31m\n{msg}\x1b[0m");
+    exit(1);
 }
 
 fn main() {
