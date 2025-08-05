@@ -1,8 +1,10 @@
 use std::io::{self, BufRead as _};
-
-use case::CaseExt;
+mod case;
 use clap::{CommandFactory as _, Parser};
 
+use crate::case::{to_camel, to_pascal};
+
+/// Convert the case of the output. Choose one of the options below:
 #[derive(Parser, Debug)]
 struct Args {
     /// If no value is provided, reads from stdin (e.g. for pipes).
@@ -16,39 +18,39 @@ struct Args {
     /// this_is_snake_case
     #[arg(short, long)]
     snake: bool,
-    /// THIS_IS_UPPER_CASE (aka. constant-case)
+    /// THIS_IS_UPPER_CASE (or CONSTANT_CASE)
     #[arg(short, long)]
     upper: bool,
-    /// this-is-kebab-case (aka. dashed-case)
+    /// this-is-kebab-case (or dashed-case)
     #[arg(short, long)]
     kebab: bool,
-    /// Adds a capital to the beginning of the sentence.
+    /// This Is Capital Case
     #[arg(short = 'a', long)]
     capitalise: bool,
+    /// This is sentence case
+    #[arg(short = 'e', long)]
+    sentence: bool,
+    /// this.is.dot.case
+    #[arg(short, long)]
+    dot: bool,
 }
 
 impl Args {
     fn apply_case(&self, value: &str) -> String {
         if self.camel {
-            return value.to_camel_lowercase();
+            return to_camel(value);
         }
         if self.pascal {
-            return value.to_camel();
+            return to_pascal(value);
         }
-        if self.snake {
-            return value.to_snake();
-        }
-        if self.kebab {
-            return value.to_dashed();
-        }
-        if self.capitalise {
-            return value.to_capitalized();
-        }
+        //         if self.snake {}
+        //         if self.kebab {}
+        //         if self.capitalise {}
         panic("No output case provided.")
     }
 
     fn run(&self) -> Result<(), io::Error> {
-        if [
+        let nb = [
             self.camel,
             self.pascal,
             self.snake,
@@ -57,10 +59,12 @@ impl Args {
         ]
         .iter()
         .filter(|x| **x)
-        .count()
-            >= 2
-        {
-            panic("You must provide 1 output case")
+        .count();
+
+        if nb >= 2 {
+            panic("You must provide 1 and 1 only output case.")
+        } else if nb == 0 {
+            panic("No output case provided. Please choose the option for your output.")
         }
 
         if let Some(value) = &self.value {
