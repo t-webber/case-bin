@@ -49,7 +49,7 @@ struct Args {
     #[arg(short = 'a', long)]
     capitalised: bool,
     /// `THIS_IS_CONSTANT_CASE` (or `UPPER_CASE`)
-    #[arg(short = 'u', long)]
+    #[arg(short = 'o', long)]
     constant: bool,
     /// `this.is.dot.case`
     #[arg(short, long)]
@@ -104,7 +104,10 @@ impl Args {
             self.pascal,
             self.snake,
             self.kebab,
+            self.sentence,
+            self.constant,
             self.capitalised,
+            self.dot,
         ]
         .iter()
         .filter(|x| **x)
