@@ -58,7 +58,7 @@ Options:
 
 Add it to your `Cargo.toml` or run:
 
-```
+```bash
 cargo add recase
 ```
 
