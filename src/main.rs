@@ -2,7 +2,7 @@ use std::io::{self, BufRead as _};
 mod case;
 use clap::{CommandFactory as _, Parser};
 
-use crate::case::{to_camel, to_pascal};
+use crate::case::Case as _;
 
 /// Convert the case of the output. Choose one of the options below:
 #[derive(Parser, Debug)]
@@ -24,9 +24,9 @@ struct Args {
     /// this-is-kebab-case (or dashed-case)
     #[arg(short, long)]
     kebab: bool,
-    /// This Is Capital Case
+    /// This Is Capitalised Case
     #[arg(short = 'a', long)]
-    capitalise: bool,
+    capitalised: bool,
     /// This is sentence case
     #[arg(short = 'e', long)]
     sentence: bool,
@@ -38,15 +38,22 @@ struct Args {
 impl Args {
     fn apply_case(&self, value: &str) -> String {
         if self.camel {
-            return to_camel(value);
+            value.to_camel_case()
+        } else if self.pascal {
+            value.to_pascal_case()
+        } else if self.snake {
+            value.to_snake_case()
+        } else if self.kebab {
+            value.to_kebab_case()
+        } else if self.sentence {
+            value.to_sentence_case()
+        } else if self.capitalised {
+            value.to_capitalised_case()
+        } else if self.dot {
+            value.to_dot_case()
+        } else {
+            panic("No output case provided.")
         }
-        if self.pascal {
-            return to_pascal(value);
-        }
-        //         if self.snake {}
-        //         if self.kebab {}
-        //         if self.capitalise {}
-        panic("No output case provided.")
     }
 
     fn run(&self) -> Result<(), io::Error> {
@@ -55,7 +62,7 @@ impl Args {
             self.pascal,
             self.snake,
             self.kebab,
-            self.capitalise,
+            self.capitalised,
         ]
         .iter()
         .filter(|x| **x)

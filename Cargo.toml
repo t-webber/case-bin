@@ -1,5 +1,5 @@
 [package]
-name = "case-bin"
+name = "recase"
 version = "0.1.0"
 edition = "2024"
 

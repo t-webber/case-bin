@@ -9,7 +9,11 @@ fn push_upper(output: &mut String, ch: char) {
     }
 }
 
-fn to_pascal_camel(value: &str, is_first_capitalised: bool) -> String {
+fn to_new_case<F: Fn(&mut String, char) -> ()>(
+    value: &str,
+    is_first_capitalised: bool,
+    one_word_begin: F,
+) -> String {
     let mut output = String::with_capacity(value.len());
     let mut is_previous_char_non_alphabetic = is_first_capitalised;
     let mut is_previous_char_lowercase = false;
@@ -21,10 +25,8 @@ fn to_pascal_camel(value: &str, is_first_capitalised: bool) -> String {
 
         let is_current_upper = ch.is_uppercase();
 
-        if is_previous_char_non_alphabetic {
-            push_upper(&mut output, ch);
-        } else if is_current_upper && is_previous_char_lowercase {
-            output.push(ch);
+        if is_previous_char_non_alphabetic || is_current_upper && is_previous_char_lowercase {
+            one_word_begin(&mut output, ch);
         } else {
             push_lower(&mut output, ch);
         }
@@ -35,10 +37,57 @@ fn to_pascal_camel(value: &str, is_first_capitalised: bool) -> String {
     output
 }
 
-pub fn to_camel(value: &str) -> String {
-    to_pascal_camel(value, false)
+pub trait Case {
+    fn to_camel_case(&self) -> String;
+    fn to_pascal_case(&self) -> String;
+    fn to_snake_case(&self) -> String;
+    fn to_kebab_case(&self) -> String;
+    fn to_sentence_case(&self) -> String;
+    fn to_capitalised_case(&self) -> String;
+    fn to_dot_case(&self) -> String;
 }
 
-pub fn to_pascal(value: &str) -> String {
-    to_pascal_camel(value, true)
+impl Case for str {
+    fn to_camel_case(&self) -> String {
+        to_new_case(self, false, push_upper)
+    }
+
+    fn to_pascal_case(&self) -> String {
+        to_new_case(self, true, push_upper)
+    }
+
+    fn to_snake_case(&self) -> String {
+        to_new_case(self, false, |output, ch| {
+            output.push('_');
+            push_lower(output, ch);
+        })
+    }
+
+    fn to_kebab_case(&self) -> String {
+        to_new_case(self, false, |output, ch| {
+            output.push('-');
+            push_lower(output, ch);
+        })
+    }
+
+    fn to_sentence_case(&self) -> String {
+        to_new_case(self, false, |output, ch| {
+            output.push(' ');
+            push_lower(output, ch);
+        })
+    }
+
+    fn to_capitalised_case(&self) -> String {
+        to_new_case(self, false, |output, ch| {
+            output.push(' ');
+            push_upper(output, ch);
+        })
+    }
+
+    fn to_dot_case(&self) -> String {
+        to_new_case(self, false, |output, ch| {
+            output.push('.');
+            push_lower(output, ch);
+        })
+    }
 }
