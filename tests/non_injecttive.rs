@@ -1,4 +1,4 @@
-use recase::Recase;
+use caseify::Caseify;
 
 struct OneWayCaseTestEntry {
     input: &'static str,
@@ -13,14 +13,14 @@ struct OneWayCaseTestEntry {
 }
 
 fn test(entry: &OneWayCaseTestEntry) {
-    assert_eq!(dbg!(entry.input.to_camel_case()), entry.camel);
-    assert_eq!(dbg!(entry.input.to_pascal_case()), entry.pascal);
-    assert_eq!(dbg!(entry.input.to_snake_case()), entry.snake);
-    assert_eq!(dbg!(entry.input.to_constant_case()), entry.constant);
-    assert_eq!(dbg!(entry.input.to_kebab_case()), entry.kebab);
-    assert_eq!(dbg!(entry.input.to_capitalised_case()), entry.capitalised);
-    assert_eq!(dbg!(entry.input.to_sentence_case()), entry.sentence);
-    assert_eq!(dbg!(entry.input.to_dot_case()), entry.dot);
+    assert_eq!(entry.input.to_camel_case(), entry.camel);
+    assert_eq!(entry.input.to_pascal_case(), entry.pascal);
+    assert_eq!(entry.input.to_snake_case(), entry.snake);
+    assert_eq!(entry.input.to_constant_case(), entry.constant);
+    assert_eq!(entry.input.to_kebab_case(), entry.kebab);
+    assert_eq!(entry.input.to_capitalised_case(), entry.capitalised);
+    assert_eq!(entry.input.to_sentence_case(), entry.sentence);
+    assert_eq!(entry.input.to_dot_case(), entry.dot);
 }
 
 #[test]

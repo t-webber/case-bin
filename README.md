@@ -1,4 +1,4 @@
-# recase
+# caseify
 
 A fast and simple Rust library and CLI tool for converting strings between different case conventions.
 
@@ -13,31 +13,31 @@ A fast and simple Rust library and CLI tool for converting strings between diffe
 Install it with:
 
 ```bash
-cargo install recase
+cargo install caseify
 ```
 
 Then use it as such:
 
 ```bash
 # Convert a single string
-recase --snake "SomeVariableName"
+caseify --snake "SomeVariableName"
 # Output: some_variable_name
 
 # Use with pipes
-echo "hello_world" | recase --camel
+echo "hello_world" | caseify --camel
 # Output: helloWorld
 
 # Process multiple lines
-cat file.txt | recase --pascal
+cat file.txt | caseify --pascal
 
 # Available options
-recase --help
+caseify --help
 ```
 
 Help message:
 
 ```bash
-Usage: recase [OPTIONS] [VALUE]
+Usage: caseify [OPTIONS] [VALUE]
 
 Arguments:
   [VALUE]  If no value is provided, reads from stdin (e.g. for pipes)
@@ -59,13 +59,13 @@ Options:
 Add it to your `Cargo.toml` or run:
 
 ```bash
-cargo add recase
+cargo add caseify
 ```
 
 Then use it as such:
 
 ```rust
-use recase::Recase;
+use caseify::Caseify;
 
 let input = "some_snake_case_string";
 
@@ -81,7 +81,7 @@ assert_eq!(input.to_dot_case(), "some.snake.case.string");
 The library intelligently handles various input formats:
 
 ```rust
-use recase::Recase;
+use caseify::Caseify;
 
 assert_eq!("XMLHttpRequest".to_snake_case(), "xml_http_request");
 assert_eq!("linux    _Kernel".to_camel_case(), "linuxKernel");

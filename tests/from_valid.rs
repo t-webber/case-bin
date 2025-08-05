@@ -1,4 +1,4 @@
-use recase::Recase;
+use caseify::Caseify;
 
 struct CaseTestEntry {
     camel: &'static str,
@@ -24,14 +24,14 @@ impl CaseTestEntry {
     }
 
     fn test(&self) {
-        self.test_output(Recase::to_camel_case, self.camel);
-        self.test_output(Recase::to_pascal_case, self.pascal);
-        self.test_output(Recase::to_snake_case, self.snake);
-        self.test_output(Recase::to_constant_case, self.constant);
-        self.test_output(Recase::to_kebab_case, self.kebab);
-        self.test_output(Recase::to_capitalised_case, self.capitalised);
-        self.test_output(Recase::to_sentence_case, self.sentence);
-        self.test_output(Recase::to_dot_case, self.dot);
+        self.test_output(Caseify::to_camel_case, self.camel);
+        self.test_output(Caseify::to_pascal_case, self.pascal);
+        self.test_output(Caseify::to_snake_case, self.snake);
+        self.test_output(Caseify::to_constant_case, self.constant);
+        self.test_output(Caseify::to_kebab_case, self.kebab);
+        self.test_output(Caseify::to_capitalised_case, self.capitalised);
+        self.test_output(Caseify::to_sentence_case, self.sentence);
+        self.test_output(Caseify::to_dot_case, self.dot);
     }
 }
 

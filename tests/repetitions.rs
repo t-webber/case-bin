@@ -1,4 +1,4 @@
-use recase::Recase;
+use caseify::Caseify;
 
 #[test]
 fn repetitions() {

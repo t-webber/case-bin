@@ -59,7 +59,7 @@ impl From<char> for Type {
 }
 
 /// Converts the string to various cases.
-pub trait Recase {
+pub trait Caseify {
     /// Converts the string to `camelCase`.
     fn to_camel_case(&self) -> String;
     /// Converts the string to `Capitalised Case`.
@@ -78,7 +78,7 @@ pub trait Recase {
     fn to_snake_case(&self) -> String;
 }
 
-impl Recase for str {
+impl Caseify for str {
     fn to_camel_case(&self) -> String {
         to_new_case(self, false, push_upper, push_lower)
     }

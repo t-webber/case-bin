@@ -1,21 +1,26 @@
 [package]
-name = "recase"
+name = "caseify"
 version = "0.1.0"
 edition = "2024"
 authors = ["Tom Webber <t.c.w.webber@gmail.com>"]
 description = "A CLI tool to convert strings between different cases"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/t-webber/recase"
+repository = "https://github.com/t-webber/caseify"
 readme = "README.md"
-keywords = ["case", "cli", "string", "conversion"]
-categories = ["command-line-utilities", "string-processing"]
+keywords = ["case", "cli", "string", "conversion", "pipes"]
+categories = [
+  "command-line-interface",
+  "command-line-utilities",
+  "text-processing",
+  "value-formatting",
+]
 
 [dependencies]
 clap = { version = "4.5.42", features = ["derive"] }
 
 [lib]
-name = "recase"
+name = "caseify"
 
 [[bin]]
-name = "recase"
+name = "caseify"
 path = "src/main.rs"
