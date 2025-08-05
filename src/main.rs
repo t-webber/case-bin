@@ -17,9 +17,9 @@ struct Args {
     /// this_is_snake_case
     #[arg(short, long)]
     snake: bool,
-    /// THIS_IS_UPPER_CASE (or CONSTANT_CASE)
-    #[arg(short, long)]
-    upper: bool,
+    /// THIS_IS_CONSTANT_CASE (or UPPER_CASE)
+    #[arg(short = 'u', long)]
+    constant: bool,
     /// this-is-kebab-case (or dashed-case)
     #[arg(short, long)]
     kebab: bool,
@@ -46,6 +46,8 @@ impl Args {
             value.to_kebab_case()
         } else if self.sentence {
             value.to_sentence_case()
+        } else if self.constant {
+            value.to_constant_case()
         } else if self.capitalised {
             value.to_capitalised_case()
         } else if self.dot {
@@ -94,5 +96,59 @@ fn panic(msg: &str) -> ! {
 fn main() {
     if let Err(err) = Args::parse().run() {
         panic(&format!("Failed to read input: pipe broken: {err}.\n"));
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Args;
+    use clap::Parser as _;
+
+    fn test(args: &[&str], input: &str, output: &str) {
+        assert_eq!(Args::parse_from(args).apply_case(input), output);
+    }
+
+    #[test]
+    fn test_args() {
+        test(
+            &["", "--camel", "this_is_snake_case"],
+            "this_is_snake_case",
+            "thisIsSnakeCase",
+        );
+        test(
+            &["", "--pascal", "this_is_snake_case"],
+            "this_is_snake_case",
+            "ThisIsSnakeCase",
+        );
+        test(
+            &["", "--snake", "ThisIsCamelCase"],
+            "ThisIsCamelCase",
+            "this_is_camel_case",
+        );
+        test(
+            &["", "--kebab", "This Is Capitalised Case"],
+            "This Is Capitalised Case",
+            "this-is-capitalised-case",
+        );
+        test(
+            &["", "--constant", "this is sentence case"],
+            "this is sentence case",
+            "THIS_IS_SENTENCE_CASE",
+        );
+        test(
+            &["", "--capitalised", "this.is.dot.case"],
+            "this.is.dot.case",
+            "This Is Dot Case",
+        );
+        test(
+            &["", "--sentence", "THIS_IS_CONSTANT_CASE"],
+            "THIS_IS_CONSTANT_CASE",
+            "This is constant case",
+        );
+        test(
+            &["", "--dot", "This Is Kebab Case"],
+            "This Is Capitalised Case",
+            "this.is.capitalised.case",
+        );
     }
 }
