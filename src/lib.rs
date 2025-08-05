@@ -9,6 +9,58 @@ fn push_upper(output: &mut String, ch: char) {
     }
 }
 
+#[derive(Debug)]
+enum Type {
+    Lowercase,
+    CapitalOrNumber,
+    Symbol,
+    None,
+}
+
+impl From<char> for Type {
+    fn from(value: char) -> Self {
+        if !value.is_alphanumeric() {
+            Self::Symbol
+        } else if value.is_lowercase() {
+            Self::Lowercase
+        } else {
+            Self::CapitalOrNumber
+        }
+    }
+}
+
+fn handle_func<F: Fn(&mut String, char), G: Fn(&mut String, char)>(
+    output: &mut String,
+    old: &Type,
+    on_word_begin: F,
+    on_normal: G,
+    is_first_capitalised: bool,
+    prev: char,
+    next_is_lowercase: bool,
+) -> Type {
+    let new = Type::from(dbg!(prev));
+    match dbg!((&old, &new)) {
+        (Type::None, _) => {
+            if is_first_capitalised {
+                push_upper(output, prev)
+            } else {
+                push_lower(output, prev)
+            }
+        }
+        (_, Type::None) => unreachable!(),
+        (_, Type::Symbol) => (),
+        (Type::Symbol, _) | (Type::Lowercase, Type::CapitalOrNumber) => on_word_begin(output, prev),
+        (Type::CapitalOrNumber, Type::CapitalOrNumber) if next_is_lowercase => {
+            on_word_begin(output, prev)
+        }
+        (Type::Lowercase, Type::Lowercase)
+        | (Type::CapitalOrNumber, Type::CapitalOrNumber | Type::Lowercase) => {
+            on_normal(output, prev)
+        }
+    }
+    new
+}
+
 fn to_new_case<F: Fn(&mut String, char), G: Fn(&mut String, char)>(
     value: &str,
     is_first_capitalised: bool,
@@ -16,33 +68,34 @@ fn to_new_case<F: Fn(&mut String, char), G: Fn(&mut String, char)>(
     on_normal: G,
 ) -> String {
     let mut output = String::with_capacity(value.len());
-    let mut is_previous_char_non_alphabetic = is_first_capitalised;
-    let mut is_previous_char_lowercase = false;
-    let mut first = is_first_capitalised;
+    let mut old = Type::None;
+    let mut current_char: Option<char> = None;
     for ch in value.chars() {
-        println!(
-            "{is_previous_char_non_alphabetic}\t{is_previous_char_lowercase}\t{first}\t{ch}: {output}"
-        );
-        if !ch.is_alphanumeric() {
-            is_previous_char_non_alphabetic = true;
-            continue;
+        if let Some(prev) = current_char {
+            old = handle_func(
+                &mut output,
+                &old,
+                &on_word_begin,
+                &on_normal,
+                is_first_capitalised,
+                prev,
+                ch.is_lowercase(),
+            );
         }
-
-        let is_current_upper = matches!(ch, '0'..='9' | 'A'..='Z');
-
-        if first {
-            push_upper(&mut output, ch);
-            first = false;
-        } else if is_previous_char_non_alphabetic || is_current_upper && is_previous_char_lowercase
-        {
-            on_word_begin(&mut output, ch);
-        } else {
-            on_normal(&mut output, ch);
-        }
-
-        is_previous_char_lowercase = !is_current_upper;
-        is_previous_char_non_alphabetic = false;
+        current_char = Some(ch);
     }
+    if let Some(prev) = current_char {
+        handle_func(
+            &mut output,
+            &old,
+            &on_word_begin,
+            &on_normal,
+            is_first_capitalised,
+            prev,
+            false,
+        );
+    }
+
     output
 }
 
@@ -129,7 +182,7 @@ impl Recase for str {
     fn to_constant_case(&self) -> String {
         to_new_case(
             self,
-            false,
+            true,
             |output, ch| {
                 output.push('_');
                 push_upper(output, ch);
