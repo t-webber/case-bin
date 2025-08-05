@@ -2,6 +2,8 @@
 
 A fast and simple Rust library and CLI tool for converting strings between different case conventions.
 
+> This is a new crate, open to comments and improvements!
+
 ## Features
 
 - **Library**: Trait-based API for easy string case conversion
@@ -43,14 +45,14 @@ Arguments:
   [VALUE]  If no value is provided, reads from stdin (e.g. for pipes)
 
 Options:
-  -c, --camel        thisIsCamelCase
-  -p, --pascal       ThisIsPascalCase
-  -s, --snake        this_is_snake_case
-  -u, --constant     THIS_IS_CONSTANT_CASE (or UPPER_CASE)
-  -k, --kebab        this-is-kebab-case (or dashed-case)
-  -a, --capitalised  This Is Capitalised Case
-  -e, --sentence     This is sentence case
-  -d, --dot          this.is.dot.case
+  -c, --camel        `thisIsCamelCase`
+  -a, --capitalised  `This Is Capitalised Case`
+  -o, --constant     `THIS_IS_CONSTANT_CASE` (or `UPPER_CASE`)
+  -d, --dot          `this.is.dot.case`
+  -k, --kebab        `this-is-kebab-case` (or `dashed-case`)
+  -p, --pascal       `ThisIsPascalCase`
+  -e, --sentence     `This is sentence case`
+  -s, --snake        `this_is_snake_case`
   -h, --help         Print help
 ```
 
