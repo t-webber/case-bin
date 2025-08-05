@@ -5,3 +5,10 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4.5.42", features = ["derive"] }
+
+[lib]
+name = "recase"
+
+[[bin]]
+name = "recase"
+path = "src/main.rs"

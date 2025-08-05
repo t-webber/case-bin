@@ -1,8 +1,7 @@
-use std::io::{self, BufRead as _};
-mod case;
 use clap::{CommandFactory as _, Parser};
+use std::io::{self, BufRead as _};
 
-use crate::case::Case as _;
+use recase::Recase as _;
 
 /// Convert the case of the output. Choose one of the options below:
 #[derive(Parser, Debug)]
