@@ -26,8 +26,13 @@ caseify --snake "SomeVariableName"
 # Output: some_variable_name
 
 # Use with pipes
-echo "hello_world" | caseify --camel
-# Output: helloWorld
+echo "some text
+some_snake_case
+AndPascalCase" | caseify --camel
+# Output:
+# someText
+# someSnakeCase
+# AndPascalCase
 
 # Process multiple lines
 cat file.txt | caseify --pascal
