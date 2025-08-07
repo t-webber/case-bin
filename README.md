@@ -74,15 +74,15 @@ Then use it as such:
 ```rust
 use caseify::Caseify;
 
-let input = "some_snake_case_string";
+let input = "lorem Ipsum_dolor.sit-amet";
 
-assert_eq!(input.to_camel_case(), "someSnakeCaseString");
-assert_eq!(input.to_pascal_case(), "SomeSnakeCaseString");
-assert_eq!(input.to_kebab_case(), "some-snake-case-string");
-assert_eq!(input.to_constant_case(), "SOME_SNAKE_CASE_STRING");
-assert_eq!(input.to_sentence_case(), "Some snake case string");
-assert_eq!(input.to_capitalised_case(), "Some Snake Case String");
-assert_eq!(input.to_dot_case(), "some.snake.case.string");
+assert_eq!(input.to_camel_case(), "loremIpsumDolorSitAmet");
+assert_eq!(input.to_pascal_case(), "LoremIpsumDolorSitAmet");
+assert_eq!(input.to_kebab_case(), "lorem-ipsum-dolor-sit-amet");
+assert_eq!(input.to_constant_case(), "LOREM_IPSUM_DOLOR_SIT_AMET");
+assert_eq!(input.to_sentence_case(), "Lorem ipsum dolor sit amet");
+assert_eq!(input.to_capitalised_case(), "Lorem Ipsum Dolor Sit Amet");
+assert_eq!(input.to_dot_case(), "lorem.ipsum.dolor.sit.amet");
 ```
 
 The library intelligently handles various input formats:

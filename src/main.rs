@@ -121,10 +121,7 @@ impl Args {
         if nb >= 2 {
             panic("You must provide 1 and 1 only output case.")
         } else if nb == 0 {
-            panic(
-                "No output case provided. Please choose to what case you want to convert to.²:w
-                ",
-            )
+            panic("No output case provided. Please choose to what case you want to convert to.")
         } else {
             if let Some(value) = &self.value {
                 println!("{}", self.apply_case(value));
